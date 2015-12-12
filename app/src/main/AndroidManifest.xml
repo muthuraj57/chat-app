@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.muthuraj.gossip" >
+    package="com.muthuraj.chat" >
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <application
@@ -9,7 +9,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.muthuraj.gossip.SignInActivity"
+            android:name="com.muthuraj.chat.SignInActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -17,13 +17,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SelectChat"/>
-        <activity android:name=".PublicChat"/>
-        <activity android:name=".AllUsers"/>
-        <activity android:name=".OnlineUsers"/>
-        <activity android:name=".PrivateChat"/>
-        <activity android:name=".ChatActivity"/>
-        <activity android:name=".About"/>
+        <activity android:name="com.muthuraj.chat.SelectChat"/>
+        <activity android:name="com.muthuraj.chat.PublicChat"/>
+        <activity android:name="com.muthuraj.chat.AllUsers"/>
+        <activity android:name="com.muthuraj.chat.OnlineUsers"/>
+        <activity android:name="com.muthuraj.chat.PrivateChat"/>
+        <activity android:name="com.muthuraj.chat.ChatActivity"/>
+        <activity android:name="com.muthuraj.chat.About"/>
 
     </application>
 
