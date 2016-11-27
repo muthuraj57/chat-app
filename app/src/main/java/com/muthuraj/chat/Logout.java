@@ -48,11 +48,10 @@ public class Logout extends AsyncTask<String, Void, String> {
             wr.write(data);
             wr.flush();
             BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            String stat = reader.readLine();
 
-            return stat;
+            return reader.readLine();
         } catch (Exception e) {
-            return new String("Exception: " + e.getMessage());
+            return "Exception: " + e.getMessage();
         }
     }
     @Override
@@ -62,7 +61,7 @@ public class Logout extends AsyncTask<String, Void, String> {
         sharedPreferences = context.getSharedPreferences(SignInActivity.CHAT, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor= sharedPreferences.edit();
         editor.clear();
-        editor.commit();
+        editor.apply();
         Toast.makeText(context, result+" logged out", Toast.LENGTH_SHORT).show();
         context.startActivity(new Intent(context, SignInActivity.class));
 

@@ -2,26 +2,29 @@ package com.muthuraj.chat.network;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
+import android.support.v7.widget.RecyclerView;
+
+import com.muthuraj.chat.privatechat.ChatAdapter;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Muthuraj on 1/11/2015.
  */
 public class FetchMessagePublic extends AsyncTask<String, Void, String> {
-    private ListView listView;
+    private RecyclerView recyclerView;
     private Context context;
 
 
 
-    public FetchMessagePublic(Context context, ListView listView) {
+    public FetchMessagePublic(Context context, RecyclerView listView) {
         this.context = context;
-        this.listView = listView;
+        this.recyclerView = listView;
 
     }
 
@@ -53,11 +56,25 @@ public class FetchMessagePublic extends AsyncTask<String, Void, String> {
     @Override
     protected void onPostExecute(String result)
     {
-        String[] users = result.split("-");
-        //users = Arrays.copyOfRange(users, 1, users.length);
-        ArrayAdapter<String> adapter= new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, users);
+        List<String > messages = new ArrayList<>();
+        List<String > names = new ArrayList<>();
 
-        listView.setAdapter(adapter);
+        String[] users = result.split("-");
+        for (String user : users) {
+
+//                    user = user.trim();
+//                    String name = user.substring(0, user.length() - 1);
+
+            String [] message = user.split(":");
+            names.add(message[0].trim());
+            messages.add(message[1].trim());
+        }
+        recyclerView.setAdapter(new ChatAdapter(context, names, messages));
+
+//        String[] users = result.split("-");
+//        ArrayAdapter<String> adapter= new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, users);
+//
+//        listView.setAdapter(adapter);
 
 
     }

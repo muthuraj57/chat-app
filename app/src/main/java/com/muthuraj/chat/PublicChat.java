@@ -6,6 +6,8 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,17 +30,17 @@ import java.util.TimerTask;
  */
 public class PublicChat extends AppCompatActivity {
 
-    ListView listView;
+    RecyclerView listView;
     SharedPreferences sharedPreferences;
     Button sendButton;
     EditText editText;
     private AlphaAnimation sendClick = new AlphaAnimation(1F, 0.8F);
 
-    private boolean checkNetwork(){
-        ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
-        if(connectivityManager.getActiveNetworkInfo()!=null && connectivityManager.getActiveNetworkInfo().isAvailable() && connectivityManager.getActiveNetworkInfo().isConnected()){
+    private boolean checkNetwork() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivityManager.getActiveNetworkInfo() != null && connectivityManager.getActiveNetworkInfo().isAvailable() && connectivityManager.getActiveNetworkInfo().isConnected()) {
             return true;
-        }else {
+        } else {
             return false;
         }
     }
@@ -53,8 +55,8 @@ public class PublicChat extends AppCompatActivity {
 
         setTitle(sharedPreferences.getString(SignInActivity.NAME, "sendMsgSharedFailure"));
 
-        sendButton = (Button)findViewById(R.id.buttonSend);
-        editText = (EditText)findViewById(R.id.chatText);
+        sendButton = (Button) findViewById(R.id.buttonSend);
+        editText = (EditText) findViewById(R.id.chatText);
 
         //Disable soft keyboard from appearing by default
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
@@ -62,22 +64,21 @@ public class PublicChat extends AppCompatActivity {
         //provide focus to editText
         editText.requestFocus();
 
-        listView = (ListView) findViewById(R.id.chatListView);
+        listView = (RecyclerView) findViewById(R.id.chatListView);
+        listView.setLayoutManager(new LinearLayoutManager(this));
 
         repeat();
 
         //On Clicking Send Button
-        sendButton.setOnClickListener(new View.OnClickListener()
-        {
-            public void onClick(View view)
-            {
+        sendButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
                 view.startAnimation(sendClick);
 
                 //To avoid sending empty messages
                 if (!editText.getText().toString().equals("")) {
-                    if(checkNetwork())
-                    new SendMessagePublic(getApplicationContext()).execute(sharedPreferences.getString(SignInActivity.NAME, "sendMsgSharedFailure"), editText.getText().toString());
-                       else
+                    if (checkNetwork())
+                        new SendMessagePublic(getApplicationContext()).execute(sharedPreferences.getString(SignInActivity.NAME, "sendMsgSharedFailure"), editText.getText().toString());
+                    else
                         Toast.makeText(getApplicationContext(), "No network available", Toast.LENGTH_SHORT).show();
 
                 }
@@ -87,21 +88,19 @@ public class PublicChat extends AppCompatActivity {
         });
     }
 
-    private void repeat()
-    {
+    private void repeat() {
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
 
-                try{
-                    if(checkNetwork())
-                    new FetchMessagePublic(getBaseContext(), listView).execute("http://muthuraj.xyz/chat/android_fetch_public_msg.php");
+                try {
+                    if (checkNetwork())
+                        new FetchMessagePublic(getBaseContext(), listView).execute("http://muthuraj.xyz/chat/android_fetch_public_msg.php");
                     else
                         Toast.makeText(getBaseContext(), "No network available", Toast.LENGTH_SHORT).show();
-                }
-                catch (Exception e){
-
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         }, 0, 5000);
@@ -114,25 +113,19 @@ public class PublicChat extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        if(item.getItemId()==R.id.active)
-        {
-            if(checkNetwork()) {
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.active) {
+            if (checkNetwork()) {
                 Intent intent = new Intent(this, OnlineUsers.class);
                 startActivity(intent);
-            }else
+            } else
                 Toast.makeText(this, "No network available", Toast.LENGTH_SHORT).show();
             return true;
-        }
-        else if (item.getItemId() == R.id.about)
-        {
+        } else if (item.getItemId() == R.id.about) {
             Intent intent = new Intent(this, About.class);
             startActivity(intent);
             return true;
-        }
-        else if(item.getItemId() == android.R.id.home)
-        {
+        } else if (item.getItemId() == android.R.id.home) {
             finish();
         }
         return super.onOptionsItemSelected(item);
