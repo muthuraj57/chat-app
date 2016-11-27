@@ -57,7 +57,7 @@ public class Logout extends AsyncTask<String, Void, String> {
     protected void onPostExecute(String result)
     {
 
-        sharedPreferences = context.getSharedPreferences(SignInActivity.Chat, Context.MODE_PRIVATE);
+        sharedPreferences = context.getSharedPreferences(SignInActivity.CHAT, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor= sharedPreferences.edit();
         editor.clear();
         editor.commit();

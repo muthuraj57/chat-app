@@ -2,6 +2,7 @@ package com.muthuraj.chat;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -9,7 +10,9 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by Muthuraj on 12/28/2014.
@@ -55,9 +58,19 @@ public class FetchUsers extends AsyncTask<String,Void, String> {
 
     @Override
     protected void onPostExecute(String s) {
+        List<String > usernames = new ArrayList<>();
         String[] users = s.split("-");
         users = Arrays.copyOfRange(users, 1, users.length);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, users);
+
+        for (String user : Arrays.copyOfRange(users, 1, users.length)) {
+            user = user.trim();
+            if (!usernames.contains(user)){
+                Log.d("FetchUsers", "onPostExecute: "+user+" length: "+user.length());
+                usernames.add(user);
+            }
+        }
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, usernames);
 
         listView.setAdapter(adapter);
 

@@ -1,11 +1,11 @@
 package com.muthuraj.chat;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,7 +22,7 @@ import java.util.TimerTask;
 /**
  * Created by Muthuraj on 12/27/2014.
  */
-public class PublicChat extends Activity {
+public class PublicChat extends AppCompatActivity {
 
     ListView listView;
     SharedPreferences sharedPreferences;
@@ -42,11 +42,12 @@ public class PublicChat extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        sharedPreferences = getSharedPreferences(SignInActivity.Chat, Context.MODE_PRIVATE);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.chat_activity);
 
-        setTitle(sharedPreferences.getString(SignInActivity.name, "sendMsgSharedFailure"));
+        sharedPreferences = getSharedPreferences(SignInActivity.CHAT, Context.MODE_PRIVATE);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        setTitle(sharedPreferences.getString(SignInActivity.NAME, "sendMsgSharedFailure"));
 
         sendButton = (Button)findViewById(R.id.buttonSend);
         editText = (EditText)findViewById(R.id.chatText);
@@ -71,7 +72,7 @@ public class PublicChat extends Activity {
                 //To avoid sending empty messages
                 if (!editText.getText().toString().equals("")) {
                     if(checkNetwork())
-                    new SendMessagePublic(getApplicationContext()).execute(sharedPreferences.getString(SignInActivity.name, "sendMsgSharedFailure"), editText.getText().toString());
+                    new SendMessagePublic(getApplicationContext()).execute(sharedPreferences.getString(SignInActivity.NAME, "sendMsgSharedFailure"), editText.getText().toString());
                        else
                         Toast.makeText(getApplicationContext(), "No network available", Toast.LENGTH_SHORT).show();
 
@@ -91,7 +92,7 @@ public class PublicChat extends Activity {
 
                 try{
                     if(checkNetwork())
-                    new FetchMessagePublic(getBaseContext(), listView).execute("http://chat.muthuraj.tk/android_fetch_public_msg.php");
+                    new FetchMessagePublic(getBaseContext(), listView).execute("http://muthuraj.xyz/chat/android_fetch_public_msg.php");
                     else
                         Toast.makeText(getBaseContext(), "No network available", Toast.LENGTH_SHORT).show();
                 }

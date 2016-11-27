@@ -32,7 +32,7 @@ public class SendMessagePublic extends AsyncTask<String, Void, String> {
         try {
             sender = (String) arg0[0];
             msg = (String) arg0[1];
-            String link = "http://chat.muthuraj.tk/android_send_public_msg.php";
+            String link = "http://muthuraj.xyz/chat/android_send_public_msg.php";
             String data = "sender"+"="+sender; //URLEncoder.encode("username", "UTF-8") + "=" + URLEncoder.encode(username, "UTF-8");
             data += "&"+"msg"+"="+msg;
 

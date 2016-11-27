@@ -1,10 +1,10 @@
 package com.muthuraj.chat;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -14,7 +14,7 @@ import android.widget.Toast;
  * Created by Muthuraj on 12/27/2014.
  */
 
-public class AllUsers extends Activity {
+public class AllUsers extends AppCompatActivity {
 
     ListView listView;
 
@@ -42,12 +42,12 @@ public class AllUsers extends Activity {
         listView = (ListView)findViewById(R.id.allUsersList);
 
         if(checkNetwork())
-        new FetchUsers(this, listView ).execute("http://chat.muthuraj.tk/android_all_users.php");
+        new FetchUsers(this, listView ).execute("http://muthuraj.xyz/chat/android_all_users.php");
         else
             Toast.makeText(this, "No network available", Toast.LENGTH_SHORT).show();
         //progressDialog.dismiss();
 
-        //On clicking name in chalist, goto chat activity with receiver name
+        //On clicking NAME in chalist, goto chat activity with receiver NAME
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
