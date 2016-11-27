@@ -1,10 +1,11 @@
-package com.muthuraj.chat;
+package com.muthuraj.chat.privatechat;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -12,16 +13,19 @@ import android.view.animation.AlphaAnimation;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
+import com.muthuraj.chat.R;
+import com.muthuraj.chat.signin.SignInActivity;
 import com.muthuraj.chat.util.GenerateUrl;
 import com.muthuraj.chat.util.RequestProcessor;
 import com.muthuraj.chat.util.RequestProcessorListener;
 import com.muthuraj.chat.util.Utils;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -30,7 +34,7 @@ import java.util.TimerTask;
  */
 public class ChatActivity extends AppCompatActivity {
 
-    ListView listView;
+    private RecyclerView recyclerView;
     SharedPreferences sharedPreferences;
     String receiver;
     Button sendButton;
@@ -40,15 +44,6 @@ public class ChatActivity extends AppCompatActivity {
 
     private Timer timer;
     private TimerTask timerTask;
-
-    private boolean checkNetwork() {
-        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        if (connectivityManager.getActiveNetworkInfo() != null && connectivityManager.getActiveNetworkInfo().isAvailable() && connectivityManager.getActiveNetworkInfo().isConnected()) {
-            return true;
-        } else {
-            return false;
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,11 +65,10 @@ public class ChatActivity extends AppCompatActivity {
         //provide focus to editText
         editText.requestFocus();
 
-        listView = (ListView) findViewById(R.id.chatListView);
-        adapter = new ArrayAdapter<>(ChatActivity.this, android.R.layout.simple_list_item_1, new String[]{});
-        listView.setAdapter(adapter);
-
-        // new FetchMsg(this, listView).execute(sharedPreferences.getString(SignInActivity.NAME, "senderShareDefFailure"),receiver,"http://chat.muthuraj.tk/android_fetch_msg.php");
+        recyclerView = (RecyclerView) findViewById(R.id.chatListView);
+        //adapter = new ArrayAdapter<>(ChatActivity.this, android.R.layout.simple_list_item_1, new String[]{});
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        //recyclerView.setAdapter(adapter);
 
         repeat();
 
@@ -85,7 +79,7 @@ public class ChatActivity extends AppCompatActivity {
 
                 //To avoid sending empty messages
                 if (!editText.getText().toString().equals("")) {
-                    if (checkNetwork()) {
+                    if (Utils.isNetworkAvailable(ChatActivity.this)) {
                         sendMessage(sharedPreferences.getString(SignInActivity.NAME, "").trim()
                                 , receiver.trim(), editText.getText().toString().trim());
 //                        new SendMessage(getApplicationContext()).execute(sharedPreferences.getString(SignInActivity.NAME, "sendMsgSharedFailure"), receiver, editText.getText().toString(), "http://muthuraj.xyz/chat/android_send_msg.php");
@@ -134,7 +128,7 @@ public class ChatActivity extends AppCompatActivity {
                 public void run() {
 
                     try {
-                        if (checkNetwork()) {
+                        if (Utils.isNetworkAvailable(ChatActivity.this)) {
                             fetchMessage(sharedPreferences.getString(SignInActivity.NAME, "senderShareDefFailure"), receiver);
                         } else {
                             Toast.makeText(getBaseContext(), "No network available", Toast.LENGTH_SHORT).show();
@@ -173,9 +167,22 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onSuccess(String response) {
                 Log.d("PrivateChat", "onSuccess: "+response);
+                List<String > messages = new ArrayList<>();
+                List<String > names = new ArrayList<>();
+
                 String[] users = response.split("-");
-                ArrayAdapter<String> adapter = new ArrayAdapter<>(ChatActivity.this, android.R.layout.simple_list_item_1, users);
-                listView.setAdapter(adapter);
+                for (String user : users) {
+
+//                    user = user.trim();
+//                    String name = user.substring(0, user.length() - 1);
+
+                    String [] message = user.split(":");
+                    names.add(message[0].trim());
+                    messages.add(message[1].trim());
+                }
+                recyclerView.setAdapter(new ChatAdapter(ChatActivity.this, names, messages));
+//                ArrayAdapter<String> adapter = new ArrayAdapter<>(ChatActivity.this, android.R.layout.simple_list_item_1, users);
+//                recyclerView.setAdapter(adapter);
             }
 
             @Override

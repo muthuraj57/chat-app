@@ -11,7 +11,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".SignInActivity"
+            android:name=".signin.SignInActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,8 +23,8 @@
         <activity android:name=".PublicChat" />
         <activity android:name=".AllUsers" />
         <activity android:name=".OnlineUsers" />
-        <activity android:name=".PrivateChat" />
-        <activity android:name=".ChatActivity" />
+        <activity android:name=".privatechat.PrivateChat" />
+        <activity android:name=".privatechat.ChatActivity" />
         <activity android:name=".About" />
 
     </application>

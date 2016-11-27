@@ -1,47 +1,47 @@
-package com.muthuraj.chat;
+package com.muthuraj.chat.network;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.widget.Toast;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.net.URL;
 import java.net.URLConnection;
 
 /**
  * Created by Muthuraj on 1/11/2015.
  */
-public class SendMessagePublic extends AsyncTask<String, Void, String> {
-
+public class FetchMessagePublic extends AsyncTask<String, Void, String> {
+    private ListView listView;
     private Context context;
-    String sender, msg;
 
-    public SendMessagePublic(Context context) {
+
+
+    public FetchMessagePublic(Context context, ListView listView) {
         this.context = context;
+        this.listView = listView;
 
     }
 
     protected void onPreExecute() {
+
 
     }
 
     @Override
     protected String doInBackground(String... arg0) {
         try {
-            sender = (String) arg0[0];
-            msg = (String) arg0[1];
-            String link = "http://muthuraj.xyz/chat/android_send_public_msg.php";
-            String data = "sender"+"="+sender; //URLEncoder.encode("username", "UTF-8") + "=" + URLEncoder.encode(username, "UTF-8");
-            data += "&"+"msg"+"="+msg;
+
+            String link = (String) arg0[0];
+
+
 
             URL url = new URL(link);
             URLConnection conn = url.openConnection();
             conn.setDoOutput(true);
-            OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
-            wr.write(data);
-            wr.flush();
+
             BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             String stat = reader.readLine();
 
@@ -53,7 +53,12 @@ public class SendMessagePublic extends AsyncTask<String, Void, String> {
     @Override
     protected void onPostExecute(String result)
     {
-        Toast.makeText(context, result, Toast.LENGTH_SHORT).show();
+        String[] users = result.split("-");
+        //users = Arrays.copyOfRange(users, 1, users.length);
+        ArrayAdapter<String> adapter= new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, users);
+
+        listView.setAdapter(adapter);
+
 
     }
 

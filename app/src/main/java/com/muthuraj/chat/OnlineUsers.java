@@ -10,6 +10,9 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.muthuraj.chat.network.FetchUsers;
+import com.muthuraj.chat.privatechat.ChatActivity;
+
 /**
  * Created by Muthuraj on 12/28/2014.
  */

@@ -11,6 +11,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.muthuraj.chat.privatechat.PrivateChat;
+import com.muthuraj.chat.signin.SignInActivity;
+
 /**
  * Created by Muthuraj on 12/27/2014.
  */

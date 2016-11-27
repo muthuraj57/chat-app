@@ -1,4 +1,4 @@
-package com.muthuraj.chat;
+package com.muthuraj.chat.signin;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -16,6 +16,9 @@ import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
+import com.muthuraj.chat.About;
+import com.muthuraj.chat.R;
+import com.muthuraj.chat.SelectChat;
 import com.muthuraj.chat.util.GenerateUrl;
 import com.muthuraj.chat.util.RequestProcessor;
 import com.muthuraj.chat.util.RequestProcessorListener;

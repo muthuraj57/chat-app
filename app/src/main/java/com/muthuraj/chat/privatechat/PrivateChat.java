@@ -1,4 +1,4 @@
-package com.muthuraj.chat;
+package com.muthuraj.chat.privatechat;
 
 import android.content.Context;
 import android.content.Intent;
@@ -17,6 +17,11 @@ import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
+import com.muthuraj.chat.About;
+import com.muthuraj.chat.OnlineUsers;
+import com.muthuraj.chat.R;
+import com.muthuraj.chat.network.ChatList;
+import com.muthuraj.chat.signin.SignInActivity;
 import com.muthuraj.chat.util.GenerateUrl;
 import com.muthuraj.chat.util.RequestProcessor;
 import com.muthuraj.chat.util.RequestProcessorListener;

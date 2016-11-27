@@ -1,35 +1,29 @@
-package com.muthuraj.chat;
+package com.muthuraj.chat.network;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 /**
- * Created by Muthuraj on 12/28/2014.
- *
- * Used as a template. Called to get users list, active users from server
+ * Created by Muthuraj on 12/29/2014.
  */
-public class FetchUsers extends AsyncTask<String,Void, String> {
+public class ChatList extends AsyncTask<String, Void, String> {
     private Context context;
     private ListView listView;
 
 
-    public FetchUsers(Context context, ListView listView)
-    {
+    public ChatList(Context context, ListView listView) {
         this.context = context;
         this.listView = listView;
     }
-
 
 
     @Override
@@ -39,42 +33,38 @@ public class FetchUsers extends AsyncTask<String,Void, String> {
     }
 
     @Override
-    protected String doInBackground(String... params) {
-        String data = null;
+    protected String doInBackground(String... arg) {
+        String list = null;
         try {
             //Get users from server through php
-            String link = params[0];
+            String username = (String) arg[0];
+            String link = (String) arg[1];
+            String data = "username=" + username;
             URL url = new URL(link);
             URLConnection conn = url.openConnection();
             conn.setDoOutput(true);
+            OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
+            wr.write(data);
+            wr.flush();
             BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            data = reader.readLine();
+            list = reader.readLine();
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
 
-        return data;
+        return list;
     }
 
     @Override
     protected void onPostExecute(String s) {
-        List<String > usernames = new ArrayList<>();
         String[] users = s.split("-");
         users = Arrays.copyOfRange(users, 1, users.length);
-
-        for (String user : Arrays.copyOfRange(users, 1, users.length)) {
-            user = user.trim();
-            if (!usernames.contains(user)){
-                Log.d("FetchUsers", "onPostExecute: "+user+" length: "+user.length());
-                usernames.add(user);
-            }
-        }
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, usernames);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, users);
 
         listView.setAdapter(adapter);
 
 
     }
 }
+
 
